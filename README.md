@@ -2,7 +2,7 @@
 tw
 ============================
 
-This scripts is a wrapper for you to make your
+This script is a wrapper for you to make your
 twitter access easier.
 
 1. First You need to type as follows:
