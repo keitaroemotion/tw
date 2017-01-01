@@ -5,6 +5,12 @@ tw
 This script is a wrapper for you to make your
 twitter access easier.
 
+0. Install the tw:
+
+`
+./installer
+`
+
 1. First You need to type as follows:
 
 `
