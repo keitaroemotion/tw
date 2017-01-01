@@ -72,7 +72,6 @@ def get_stdin(msg="")
     print "#{msg}" 
     input = $stdin.gets.chomp.strip
     abort if input == "q" 
-    puts input.red
     input
 end
 
