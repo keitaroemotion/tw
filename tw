@@ -51,8 +51,10 @@ end
 def timeline(user, index, lines=[])
     output       = `t timeline #{user}`
     output_lines = output.split("@#{user}")
+    index = index == 0 ? 3 : index
     output_lines[1..index].each do |line|
         puts "@#{user.green} #{line.strip}" if line
+        puts "tweet retrieval failure:  #{user.cyan}#{output.red}" if !lines
         links = line.split(" ").select{|t| t.start_with?("http")}
         lines.push links if line && links.size > 0
     end if output_lines.size > 0 
