@@ -22,13 +22,13 @@ def disp_timeline(cmd, user, option="l")
 end
 
 def get_input()
-  print "> "
-  $stdin.gets.chomp
+    print "> "
+    $stdin.gets.chomp
 end
 
 def collect_message(msg="")
-  abort "tweet cancelled" if msg.include?(":exit")
-  msg.include?(";") ? msg : collect_message("#{msg} \n#{get_input}")
+    abort "tweet cancelled" if msg.include?(":exit")
+    msg.include?(";") ? msg : collect_message("#{msg} \n#{get_input}")
 end
 
 def post_into_timeline(cmd, user, option="p")
