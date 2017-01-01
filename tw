@@ -13,13 +13,15 @@ end
 def help(cmd, option="help")
     if cmd.keys.include?(option) || cmd.size == 0
         puts
-        puts "tw  [l=?] ... show the time line. You have to input number in ? "
-        puts "              (? is number of records to show)"
-        puts "tw  [p]   ... post a tweet. (Once you type this, interactive"
-        puts "              input required for actual tweet" 
-        puts "tw  [whoami]  show your profile "
-        puts "tw [wer][kw]  show followers   "
-        puts "tw [wing][kw] show followings   "
+        puts "tw  [l=?] ...   show the time line. You have to input number in ? "
+        puts "                (? is number of records to show)"
+        puts "tw  [p]   ...   post a tweet. (Once you type this, interactive"
+        puts "                input required for actual tweet" 
+        puts "tw  [whoami]    show your profile "
+        puts "tw [wer][kw]    show followers   "
+        puts "tw [wer] rand   show followers randomly"
+        puts "tw [wing][kw]   show followings   "
+        puts "tw [wing] rand  show followings randomly  "
         puts
     end
     cmd
@@ -79,12 +81,19 @@ def get_followings(cmd, res=[], option="wing")
     get_followers(cmd, res, option)
 end
 
-def get_followers(cmd, res=[], option="wer")
+def get_followers(cmd, res=[], option="wer", rand="rand")
     if cmd.keys.include?(option)
         search_term = cmd.keys.select{|k| k != option }[0]
-        _system("t follo#{option}s", true).split(" ").each do |follower|
+        followers = _system("t follo#{option}s", true).split(" ")
+
+        followers.each do |follower|
             res.push puts_ret(follower) if follower.start_with?(search_term)
-        end
+        end if search_term != rand
+
+        (0..5).each do |x|
+          res.push puts_ret(followers[Random.rand(followers.size)])
+        end if search_term == rand
+
         abort "Not Found" if res.size == 0
         maxnum = get_stdin("[Maximum Number]") 
         res.each do |follower|
