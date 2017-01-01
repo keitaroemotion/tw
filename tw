@@ -18,6 +18,8 @@ def help(cmd, option="help")
         puts "tw  [p]   ... post a tweet. (Once you type this, interactive"
         puts "              input required for actual tweet" 
         puts "tw  [whoami]  show your profile "
+        puts "tw [wer][kw]  show followers   "
+        puts "tw [wing][kw] show followings   "
         puts
     end
     cmd
@@ -29,9 +31,13 @@ def max_number(cmd, option, i=3)
     (cmd[option] ||= 3).to_i 
 end
 
-def _system(x)
+def _system(x, ret=false)
     output = `#{x}`
-    puts output.green
+    if ret
+        return output
+    else
+        puts output.green
+    end
 end
 
 def disp_whoami(cmd, option="whoami")
@@ -40,12 +46,53 @@ def disp_whoami(cmd, option="whoami")
     end
 end
 
+def timeline(user, index, lines=[])
+    output       = `t timeline #{user}`
+    output_lines = output.split("@#{user}")
+    output_lines[1..index].each do |line|
+        puts "@#{user.green} #{line.strip}" if line
+        links = line.split(" ").select{|t| t.start_with?("http")}
+        lines.push links if line && links.size > 0
+    end if output_lines.size > 0 
+    lines.flatten.uniq
+end
+
 def disp_timeline(cmd, user, option="l")
     if cmd.keys.include?(option)
-        output       = `t timeline #{user}`
-        output_lines = output.split("@#{user}")
-        output_lines[1..max_number(cmd, option)].each do |line|
-            puts "@#{user.green} #{line.strip}" if line
+        timeline user, max_number(cmd, option)
+    end
+end
+
+def puts_ret(follower)
+    puts follower.green
+    follower
+end
+
+def get_stdin(msg="")
+    print "#{msg}" 
+    input = $stdin.gets.chomp.strip
+    abort if input == "q" 
+    puts input.red
+    input
+end
+
+def get_followings(cmd, res=[], option="wing")
+    get_followers(cmd, res, option)
+end
+
+def get_followers(cmd, res=[], option="wer")
+    if cmd.keys.include?(option)
+        search_term = cmd.keys.select{|k| k != option }[0]
+        _system("t follo#{option}s", true).split(" ").each do |follower|
+            res.push puts_ret(follower) if follower.start_with?(search_term)
+        end
+        abort "Not Found" if res.size == 0
+        maxnum = get_stdin("[Maximum Number]") 
+        res.each do |follower|
+            links = timeline(follower, (maxnum.to_i ||= 3))
+            if get_stdin("[o: open links]") == "o"
+                links.each {|l| system("open #{l}")}  
+            end
         end
     end
 end
@@ -71,3 +118,5 @@ end
 disp_timeline      cmd, USER
 post_into_timeline cmd, USER
 disp_whoami        cmd
+get_followers      cmd
+get_followings     cmd
