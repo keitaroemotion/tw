@@ -98,7 +98,7 @@ def get_followers(cmd, res=[], option="wer", rand="rand")
         maxnum = get_stdin("[Maximum Number]") 
         res.each do |follower|
             links = timeline(follower, (maxnum.to_i ||= 3))
-            if get_stdin("[o: open links]") == "o"
+            if get_stdin("[o: open links q:quit]") == "o"
                 links.each {|l| system("open #{l}")}  
             end
         end
