@@ -24,11 +24,15 @@ end
 
 cmd = help to_map(ARGV.map{|arg| arg.split('=') })
 
+def max_number(cmd, option, i=3)
+    (cmd[option] ||= 3).to_i 
+end
+
 def disp_timeline(cmd, user, option="l")
     if cmd.keys.include?(option)
         output       = `t timeline #{user}`
         output_lines = output.split("@#{user}")
-        output_lines[1..cmd[option].to_i].each do |line|
+        output_lines[1..max_number(cmd, option)].each do |line|
             puts "@#{user.green} #{line.strip}" if line
         end
     end
