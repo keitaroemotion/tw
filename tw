@@ -2,14 +2,15 @@
 
 require 'colorize'
 
+# You need to alter this into your twitter account name(do not add @ mark)
+USER="keisuganodev" 
+
 def to_map(list, hash={})
     list.each{ |k, v| hash[k] = v }
     hash
 end
 
 cmd = to_map(ARGV.map{|arg| arg.split('=') })
-
-USER="keisuganodev"
 
 def disp_timeline(cmd, user, option="l")
     if cmd.keys.include?(option)
