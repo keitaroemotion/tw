@@ -13,10 +13,11 @@ end
 def help(cmd, option="help")
     if cmd.keys.include?(option) || cmd.size == 0
         puts
-        puts "t  [l=?] ... show the time line. You have to input number in ? "
-        puts "             (? is number of records to show)"
-        puts "t  [p]   ... post a tweet. (Once you type this, interactive"
-        puts "             input required for actual tweet" 
+        puts "tw  [l=?] ... show the time line. You have to input number in ? "
+        puts "              (? is number of records to show)"
+        puts "tw  [p]   ... post a tweet. (Once you type this, interactive"
+        puts "              input required for actual tweet" 
+        puts "tw  [whoami]  show your profile "
         puts
     end
     cmd
@@ -26,6 +27,17 @@ cmd = help to_map(ARGV.map{|arg| arg.split('=') })
 
 def max_number(cmd, option, i=3)
     (cmd[option] ||= 3).to_i 
+end
+
+def _system(x)
+    output = `#{x}`
+    puts output.green
+end
+
+def disp_whoami(cmd, option="whoami")
+    if cmd.keys.include?(option)
+        _system "t whoami"
+    end
 end
 
 def disp_timeline(cmd, user, option="l")
@@ -58,3 +70,4 @@ end
 
 disp_timeline      cmd, USER
 post_into_timeline cmd, USER
+disp_whoami        cmd
