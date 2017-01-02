@@ -22,6 +22,8 @@ def help(cmd, option="help")
         puts "tw [wer] rand   show followers randomly"
         puts "tw [wing][kw]   show followings   "
         puts "tw [wing] rand  show followings randomly  "
+        puts "tw [o]          open tweet of yours via open command"
+        puts "tw [no]          open notification of yours via open command"
         puts
     end
     cmd
@@ -125,8 +127,14 @@ def post_into_timeline(cmd, user, option="p")
     end
 end
 
+def open_via_browser(cmd, user)
+    system "open https://twitter.com/#{user}?lang=en" if cmd.keys.include?("o")
+    system "open https://twitter.com/i/notifications?lang=en" if cmd.keys.include?("no")
+end
+
 disp_timeline      cmd, USER
 post_into_timeline cmd, USER
 disp_whoami        cmd
 get_followers      cmd
 get_followings     cmd
+open_via_browser   cmd, USER
